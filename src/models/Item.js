@@ -1,7 +1,7 @@
 import { DataTypes, UUIDV4 } from "sequelize";
-import { CATEGORY, LETTER, POSITION, STATUS, TYPE } from "./values.enum";
+import { CATEGORY, LETTER, TYPE } from "./values.enum.js";
 
-export const User = (sequelize) =>
+export const Item = (sequelize) =>
   sequelize.define(
     "item",
     {
@@ -35,19 +35,19 @@ export const User = (sequelize) =>
         allowNull: false,
       },
       lastCount: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
       },
       lastCountDate: {
         type: DataTypes.DATE,
       },
       currentStock: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
       },
       lastDischarge: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
       },
       itemEntry: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
       },
       itemEntryDate: {
         type: DataTypes.DATE,

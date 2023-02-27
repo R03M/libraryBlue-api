@@ -1,6 +1,6 @@
-import "dotenv";
-import server from "./app";
-import { syncDB } from "./db";
+import "dotenv/config";
+import server from "./app.js";
+import { syncDB } from "./src/db/index.js";
 
 const { PORT } = process.env;
 

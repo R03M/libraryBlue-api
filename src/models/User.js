@@ -1,5 +1,5 @@
 import { DataTypes, UUIDV4 } from "sequelize";
-import { POSITION, STATUS } from "./values.enum";
+import { POSITION, STATUS } from "./values.enum.js";
 
 export const User = (sequelize) =>
   sequelize.define(

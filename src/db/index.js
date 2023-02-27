@@ -1,7 +1,7 @@
-import { dbConfig } from "./config";
-import { Auth } from "../models/Auth";
-import { Item } from "../models/Item";
-import { User } from "../models/User";
+import { dbConfig } from "./config.js";
+import { Auth } from "../models/Auth.js";
+import { Item } from "../models/Item.js";
+import { User } from "../models/User.js";
 
 const auth = Auth(dbConfig);
 const item = Item(dbConfig);
@@ -13,4 +13,4 @@ user.hasOne(auth);
 
 export const syncDB = () => dbConfig.sync({ force: true });
 
-export { user as AuthModel, item as ItemModel, auth as AuthModel };
+export { user as UserModel, item as ItemModel, auth as AuthModel };
