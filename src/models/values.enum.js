@@ -2,6 +2,7 @@ export const POSITION = {
   ADMIN: "Admin",
   MANAGER: "Manager",
   HELPER: "Helper",
+  OBSERVANT: "Observant",
 };
 
 export const STATUS = {
@@ -26,4 +27,5 @@ export const CATEGORY = {
   BROCHURES: "Brochures",
   ACTIVITY_GUIDE: "Activity Guide",
   OTHERS: "Others",
+  TREATIES: "Treaties",
 };

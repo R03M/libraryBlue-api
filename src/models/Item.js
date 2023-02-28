@@ -58,11 +58,12 @@ export const Item = (sequelize) =>
           CATEGORY.BOOKS,
           CATEGORY.BROCHURES,
           CATEGORY.ACTIVITY_GUIDE,
+          CATEGORY.TREATIES,
           CATEGORY.OTHERS
         ),
         allowNull: false,
       },
-      secondaryNetwork: {
+      associatedCompany: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },

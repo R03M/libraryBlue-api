@@ -27,7 +27,12 @@ export const User = (sequelize) =>
         allowNull: false,
       },
       position: {
-        type: DataTypes.ENUM(POSITION.ADMIN, POSITION.MANAGER, POSITION.HELPER),
+        type: DataTypes.ENUM(
+          POSITION.ADMIN,
+          POSITION.MANAGER,
+          POSITION.HELPER,
+          POSITION.OBSERVANT
+        ),
         allowNull: false,
       },
       status: {
@@ -38,14 +43,6 @@ export const User = (sequelize) =>
         type: DataTypes.DATEONLY,
         defaultValue: DataTypes.NOW,
         allowNull: false,
-      },
-      mainNetwork: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      secondaryNetwork: {
-        type: DataTypes.STRING,
-        allowNull: true,
       },
     },
     {
