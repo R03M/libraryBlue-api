@@ -9,8 +9,10 @@ const user = User(dbConfig);
 
 user.hasMany(item);
 item.belongsTo(user);
-user.hasOne(auth);
+auth.hasOne(user);
+user.belongsTo(auth);
 
-export const syncDB = () => dbConfig.sync({ force: true });
+
+export const syncDB = () => dbConfig.sync({ force: false });
 
 export { user as UserModel, item as ItemModel, auth as AuthModel };
