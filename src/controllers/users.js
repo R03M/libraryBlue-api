@@ -1,29 +1,59 @@
-// import { UserModel } from "../db";
+import { AuthModel, UserModel } from "../db/index.js";
+import { comparePass, hashPassW } from "../utils/bcrypt.js";
+import { errorRegister } from "../utils/error.js";
 
 export const getUser = async (req, res) => {
   try {
-    const allUsers = "Data data data and more data";
+    const allUsers = await UserModel.findAll({
+      include: [AuthModel],
+    });
     res.status(200).json({ allUsers });
   } catch (error) {
     res.send({ errorMessage: error });
   }
 };
 
-export const postUsers = async (req, res) => {
-  const {
+export const registerUser = async (req, res) => {
+  let {
+    email,
+    password,
+    isGoogle,
     firstName,
     lastName,
     image,
     position,
     status,
-    mainNetwork,
-    secondaryNetwork,
   } = req.body;
-  const data = req.body;
+
+  //TODO: Add validation to => firstName, lastName, image, position, status.
+
+  const errors = errorRegister(email, password, isGoogle);
+  if (errors) return res.status(400).json(errors);
+
   try {
-    if (!data) res.status(404).json({ errorMessage: "Data required" });
-    if (data) res.status(200).json(data);
+    const hashedPassword = await hashPassW(password);
+    password = hashedPassword;
+
+    const auth = await AuthModel.create({
+      email,
+      password,
+      isGoogle,
+    });
+
+    const userData = {
+      firstName,
+      lastName,
+      fullName: `${firstName} ${lastName}`,
+      image,
+      position,
+      status,
+      authId: auth.id,
+    };
+
+    await UserModel.create(userData);
+
+    res.status(200).json({ message: "Registered user successfully", userData });
   } catch (error) {
-    res.status(404).json({ errorMessage: error.message });
+    res.status(500).json({ errorMessage: error.message });
   }
 };
