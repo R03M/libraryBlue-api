@@ -1,4 +1,4 @@
-import { DataTypes, DataTypes, UUIDV4 } from "sequelize";
+import { DataTypes, UUIDV4 } from "sequelize";
 
 export const Company = (sequelize) =>
   sequelize.define(

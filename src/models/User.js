@@ -27,17 +27,32 @@ export const User = (sequelize) =>
         allowNull: false,
       },
       position: {
-        type: DataTypes.ENUM(
-          POSITION.ADMIN,
-          POSITION.MANAGER,
-          POSITION.HELPER,
-          POSITION.OBSERVANT
-        ),
+        type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          customValidator: (value) => {
+            const enums =
+              (POSITION.ADMIN,
+              POSITION.MANAGER,
+              POSITION.HELPER,
+              POSITION.OBSERVANT);
+            if (!enums.includes(value)) {
+              throw new Error("not a valid option");
+            }
+          },
+        },
       },
       status: {
-        type: DataTypes.ENUM(STATUS.ACTIVE, STATUS.INACTIVE, STATUS.BAN),
+        type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          customValidator: (value) => {
+            const enums = (STATUS.ACTIVE, STATUS.INACTIVE, STATUS.BAN);
+            if (!enums.includes(value)) {
+              throw new Error("not a valid option");
+            }
+          },
+        },
       },
       accountCreation: {
         type: DataTypes.DATEONLY,

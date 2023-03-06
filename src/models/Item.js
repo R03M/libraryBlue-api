@@ -1,5 +1,5 @@
 import { DataTypes, UUIDV4 } from "sequelize";
-import { CATEGORY, LETTER, TYPE } from "./values.enum.js";
+import { CATEGORY, LETTER, EDITION } from "./values.enum.js";
 
 export const Item = (sequelize) =>
   sequelize.define(
@@ -26,13 +26,29 @@ export const Item = (sequelize) =>
         type: DataTypes.STRING,
         allowNull: false,
       },
-      type: {
-        type: DataTypes.ENUM(TYPE.PUBLIC, TYPE.STUDY),
+      edition: {
+        type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          customValidator: (value) => {
+            const enums = (EDITION.PUBLIC, EDITION.STUDY);
+            if (!enums.includes(value)) {
+              throw new Error("not a valid option");
+            }
+          },
+        },
       },
       letter: {
-        type: DataTypes.ENUM(LETTER.BIG, LETTER.NORMAL),
+        type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          customValidator: (value) => {
+            const enums = (LETTER.BIG, LETTER.NORMAL);
+            if (!enums.includes(value)) {
+              throw new Error("not a valid option");
+            }
+          },
+        },
       },
       lastCount: {
         type: DataTypes.INTEGER,
@@ -53,15 +69,22 @@ export const Item = (sequelize) =>
         type: DataTypes.DATE,
       },
       category: {
-        type: DataTypes.ENUM(
-          CATEGORY.MAGAZINES,
-          CATEGORY.BOOKS,
-          CATEGORY.BROCHURES,
-          CATEGORY.ACTIVITY_GUIDE,
-          CATEGORY.TREATIES,
-          CATEGORY.OTHERS
-        ),
+        type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          customValidator: (value) => {
+            const enums =
+              (CATEGORY.MAGAZINES,
+              CATEGORY.BOOKS,
+              CATEGORY.BROCHURES,
+              CATEGORY.ACTIVITY_GUIDE,
+              CATEGORY.TREATIES,
+              CATEGORY.OTHERS);
+            if (!enums.includes(value)) {
+              throw new Error("not a valid option");
+            }
+          },
+        },
       },
       associatedCompany: {
         type: DataTypes.BOOLEAN,

@@ -11,7 +11,7 @@ export const STATUS = {
   BAN: "Ban",
 };
 
-export const TYPE = {
+export const EDITION = {
   PUBLIC: "Public",
   STUDY: "Study",
 };
