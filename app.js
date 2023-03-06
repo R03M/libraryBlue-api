@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import morgan from "morgan";
-import routes from "./src/routes/index.js";
+import routes from "./src/routes/index.Routes.js";
 const { CORS_URL } = process.env;
 
 const server = express();
