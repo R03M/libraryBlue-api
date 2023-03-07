@@ -29,13 +29,15 @@ export const User = (sequelize) =>
       position: {
         type: DataTypes.STRING,
         allowNull: false,
+        defaultValue: POSITION.HELPER,
         validate: {
           customValidator: (value) => {
-            const enums =
-              (POSITION.ADMIN,
+            const enums = [
+              POSITION.ADMIN,
               POSITION.MANAGER,
               POSITION.HELPER,
-              POSITION.OBSERVANT);
+              POSITION.OBSERVANT,
+            ];
             if (!enums.includes(value)) {
               throw new Error("not a valid option");
             }
@@ -44,10 +46,11 @@ export const User = (sequelize) =>
       },
       status: {
         type: DataTypes.STRING,
+        defaultValue: STATUS.ACTIVE,
         allowNull: false,
         validate: {
           customValidator: (value) => {
-            const enums = (STATUS.ACTIVE, STATUS.INACTIVE, STATUS.BAN);
+            const enums = [STATUS.ACTIVE, STATUS.INACTIVE, STATUS.BAN];
             if (!enums.includes(value)) {
               throw new Error("not a valid option");
             }

@@ -31,7 +31,7 @@ export const Item = (sequelize) =>
         allowNull: false,
         validate: {
           customValidator: (value) => {
-            const enums = (EDITION.PUBLIC, EDITION.STUDY);
+            const enums = [EDITION.PUBLIC, EDITION.STUDY];
             if (!enums.includes(value)) {
               throw new Error("not a valid option");
             }
@@ -43,7 +43,7 @@ export const Item = (sequelize) =>
         allowNull: false,
         validate: {
           customValidator: (value) => {
-            const enums = (LETTER.BIG, LETTER.NORMAL);
+            const enums = [LETTER.BIG, LETTER.NORMAL];
             if (!enums.includes(value)) {
               throw new Error("not a valid option");
             }
@@ -73,13 +73,14 @@ export const Item = (sequelize) =>
         allowNull: false,
         validate: {
           customValidator: (value) => {
-            const enums =
-              (CATEGORY.MAGAZINES,
+            const enums = [
+              CATEGORY.MAGAZINES,
               CATEGORY.BOOKS,
               CATEGORY.BROCHURES,
               CATEGORY.ACTIVITY_GUIDE,
               CATEGORY.TREATIES,
-              CATEGORY.OTHERS);
+              CATEGORY.OTHERS,
+            ];
             if (!enums.includes(value)) {
               throw new Error("not a valid option");
             }
