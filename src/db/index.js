@@ -18,12 +18,7 @@ user.hasOne(company);
 company.hasMany(item);
 item.belongsTo(company);
 
-<<<<<<< HEAD
 export const syncDB = () => dbConfig.sync({ force: false });
-=======
-
-export const syncDB = () => dbConfig.sync({ force: true });
->>>>>>> 9f5b09ce140f20bf54cf5f4a4a2cf59a942b972b
 
 export {
   user as UserModel,
