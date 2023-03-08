@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getCompanies, registerCompany } from '../controllers/company.js'
+import { getCompanies, registerCompany, deleteCompany } from "../controllers/company.js";
 
 const router = Router();
 
 router.get("/all", getCompanies);
-router.post('/new', registerCompany)
+router.post("/new", registerCompany);
+router.delete("/delete", deleteCompany);
 
 export default router;
