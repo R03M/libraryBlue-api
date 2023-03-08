@@ -56,9 +56,6 @@ export const Item = (sequelize) =>
       lastCountDate: {
         type: DataTypes.DATE,
       },
-      currentStock: {
-        type: DataTypes.INTEGER,
-      },
       lastDischarge: {
         type: DataTypes.INTEGER,
       },
