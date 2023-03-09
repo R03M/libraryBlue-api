@@ -10,7 +10,7 @@ const router = Router();
 
 router.post("/", getItemByCompany);
 router.post("/new", createItem);
-router.post("/update", updateItem);
+router.put("/update", updateItem);
 router.delete("/delete", deleteItem);
 
 export default router;

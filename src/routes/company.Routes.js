@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/all", getCompanies);
 router.post("/new", registerCompany);
+router.put("/update", updateCompany);
 router.delete("/delete", deleteCompany);
-router.post("/update", updateCompany);
 
 export default router;
