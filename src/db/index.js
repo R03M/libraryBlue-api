@@ -9,16 +9,16 @@ const item = Item(dbConfig);
 const user = User(dbConfig);
 const company = Company(dbConfig);
 
-auth.hasOne(user);
-user.belongsTo(auth);
+auth.hasOne(user, { foreignKey: "userId" });
+user.belongsTo(auth, { foreignKey: "authId" });
 
-company.hasMany(user);
-user.hasOne(company);
+company.hasMany(user, { as: "users" });
+user.belongsTo(company, { as: "company", foreignKey: "companyId" });
 
-company.hasMany(item);
-item.belongsTo(company);
+company.hasMany(item, { as: "items" });
+item.belongsTo(company, { as: "company", foreignKey: "companyId" });
 
-export const syncDB = () => dbConfig.sync({ force: false });
+export const syncDB = () => dbConfig.sync({ force: true });
 
 export {
   user as UserModel,

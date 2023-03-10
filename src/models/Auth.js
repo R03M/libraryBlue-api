@@ -1,7 +1,7 @@
 import { DataTypes, UUIDV4 } from "sequelize";
 
-export const Auth = (sequelize) => {
-  const AuthModel = sequelize.define(
+export const Auth = (sequelize) =>
+  sequelize.define(
     "auth",
     {
       id: {
@@ -20,19 +20,8 @@ export const Auth = (sequelize) => {
         defaultValue: false,
         allowNull: true,
       },
-      userId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-      },
     },
     {
       timestamps: false,
     }
   );
-
-  AuthModel.associate = (models) => {
-    AuthModel.belongsTo(models.User, { foreignKey: "userId" });
-  };
-
-  return AuthModel;
-};
