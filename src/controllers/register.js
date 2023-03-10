@@ -31,25 +31,25 @@ export const registerUser = async (req, res) => {
     const hashedPassword = await hashPassW(password);
     password = hashedPassword;
 
-    const auth = await AuthModel.create({
-      email,
-      password,
-      isGoogle,
-    });
-
-    const userData = {
+    const user = await UserModel.create({
       firstName,
       lastName,
       fullName: `${firstName} ${lastName}`,
       image,
       position,
       status,
-      authId: auth.id,
-    };
+    });
+    const auth = await AuthModel.create({
+      email,
+      password,
+      isGoogle,
+      userId: user.id,
+    });
 
-    await UserModel.create(userData);
+    await auth.setUser(user);
+    await user.setAuth(auth);
 
-    res.status(200).json({ message: "Registered user successfully", userData });
+    res.status(200).json({ message: "Registered user successfully" });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
