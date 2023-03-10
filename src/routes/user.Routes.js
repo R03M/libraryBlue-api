@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
   getAllUser,
-  getDataUserId,
   updateUser,
   deleteUser,
 } from "../controllers/users.js";
@@ -9,7 +8,6 @@ import {
 const router = Router();
 
 router.get("/all", getAllUser);
-router.post("/dataUser", getDataUserId);
 router.put("/update", updateUser);
 router.delete("/delete", deleteUser);
 

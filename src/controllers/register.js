@@ -83,7 +83,7 @@ export const selectCompany = async (req, res) => {
     if (errors) return res.status(400).json(errors);
 
     await company.addUser(idUser);
-    res.status(200).json({ response });
+    res.status(200).json({ message: "Updated" });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }

@@ -1,8 +1,15 @@
-import { CompanyModel } from "../db/index.js";
+import { CompanyModel, UserModel } from "../db/index.js";
 
 export const getCompanies = async (req, res) => {
   try {
-    const allCompanies = await CompanyModel.findAll();
+    const allCompanies = await CompanyModel.findAll({
+      include: [
+        {
+          model: UserModel,
+          as: "users",
+        },
+      ],
+    });
     allCompanies.length
       ? res.status(200).json({ allCompanies })
       : res.status(201).json({ allCompanies: "No Companies for now" });
@@ -22,15 +29,18 @@ export const registerCompany = async (req, res) => {
         .status(406)
         .json({ message: "There is already a company with that name" });
     }
-    const newCompany = await CompanyModel.create({
+    const company = await CompanyModel.create({
       name,
       image,
       associatedCompany,
+      userId: idUser,
     });
 
-    const response = await newCompany.addUser(idUser);
+    const user = await UserModel.findByPk(idUser);
 
-    res.status(200).json({ message: "Company Created", response });
+    await user.setCompany(company);
+
+    res.status(200).json({ message: "Company Created" });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }

@@ -1,26 +1,13 @@
-import { AuthModel, UserModel } from "../db/index.js";
+import { AuthModel, CompanyModel, UserModel } from "../db/index.js";
 
 export const getAllUser = async (req, res) => {
   try {
-    const allUsers = await UserModel.findAll();
-    res.status(200).json({ allUsers });
-  } catch (error) {
-    res.status(500).json({ errorMessage: error });
-  }
-};
-
-export const getDataUserId = async (req, res) => {
-  //TODO: res.send(user(allData), company(name, id), associated(name, id) )
-
-  try {
-    // const myCompany = await CompanyModel.findAll({
-    //   where: { id: idCompany },
-    // });
-    // let nameAssociated = myCompany[0].associatedCompany;
-    // const companyAssociated = await CompanyModel.findAll({
-    //   where: { name: nameAssociated },
-    // });
-    // let idAssociated = companyAssociated[0].id;
+    const allUsers = await UserModel.findAll({
+      include: [{ model: AuthModel }],
+    });
+    allUsers.length
+      ? res.status(200).json({ allUsers })
+      : res.status(201).json({ allUsers: "No Users for now" });
   } catch (error) {
     res.status(500).json({ errorMessage: error });
   }
