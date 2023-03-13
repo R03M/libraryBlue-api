@@ -3,13 +3,16 @@ import { AuthModel, CompanyModel, UserModel } from "../db/index.js";
 export const getAllUser = async (req, res) => {
   try {
     const allUsers = await UserModel.findAll({
-      include: [{ model: AuthModel }],
+      include: [
+        { model: AuthModel, required: false },
+        { model: CompanyModel, as: "company", required: false },
+      ],
     });
     allUsers.length
       ? res.status(200).json({ allUsers })
       : res.status(201).json({ allUsers: "No Users for now" });
   } catch (error) {
-    res.status(500).json({ errorMessage: error });
+    res.status(500).json({ errorMessage: error.message });
   }
 };
 

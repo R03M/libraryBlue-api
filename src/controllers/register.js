@@ -46,7 +46,6 @@ export const registerUser = async (req, res) => {
       userId: user.id,
     });
 
-    await auth.setUser(user);
     await user.setAuth(auth);
 
     res.status(200).json({ message: "Registered user successfully" });

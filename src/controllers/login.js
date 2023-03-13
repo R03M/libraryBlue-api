@@ -22,7 +22,7 @@ export const login = async (req, res) => {
         where: {
           id: [authUser.userId],
         },
-        include: [{ model: AuthModel }, { model: CompanyModel }],
+        include: [{ model: AuthModel }, { model: CompanyModel, as: "company" }],
       });
       res.status(200).json({ userData });
     }
