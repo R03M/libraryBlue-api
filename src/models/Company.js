@@ -21,6 +21,14 @@ export const Company = (sequelize) =>
         type: DataTypes.STRING,
         allowNull: true,
       },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: "users",
+          key: "id",
+        },
+      },
     },
     {
       timestamps: false,

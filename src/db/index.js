@@ -9,8 +9,8 @@ const item = Item(dbConfig);
 const user = User(dbConfig);
 const company = Company(dbConfig);
 
-auth.hasOne(user, { foreignKey: "userId" });
-user.belongsTo(auth, { foreignKey: "authId" });
+auth.hasOne(user);
+user.belongsTo(auth);
 
 company.hasMany(user, { as: "users" });
 user.belongsTo(company, { as: "company", foreignKey: "companyId" });
@@ -18,7 +18,7 @@ user.belongsTo(company, { as: "company", foreignKey: "companyId" });
 company.hasMany(item, { as: "items" });
 item.belongsTo(company, { as: "company", foreignKey: "companyId" });
 
-export const syncDB = () => dbConfig.sync({ force: true });
+export const syncDB = () => dbConfig.sync({ force: false });
 
 export {
   user as UserModel,
