@@ -8,7 +8,7 @@ import {
 const router = Router();
 
 router.post("/new", registerUser);
-router.post("/email", checkEmail);
+router.post("/checkEmail", checkEmail);
 router.post("/selectCompany", selectCompany);
 
 export default router;

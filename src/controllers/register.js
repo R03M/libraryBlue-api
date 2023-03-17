@@ -56,17 +56,19 @@ export const registerUser = async (req, res) => {
 
 export const checkEmail = async (req, res) => {
   try {
-    const authData = await AuthModel.findAll();
     const { email } = req.body;
+    const authData = await AuthModel.findAll({
+      attributes: ["email", "isGoogle"],
+    });
 
-    let allEmail = authData.map(({ email, isGoogle }) => ({ email, isGoogle }));
-
-    let response = allEmail.find((e) => e.email === email) || {
+    let response = authData
+      .map(({ email, isGoogle }) => ({ email, isGoogle }))
+      .find((e) => e.email === email) || {
       email: false,
       isGoogle: null,
     };
 
-    res.status(200).json({ chechEmail: response });
+    res.status(200).json({ infocheck: response });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
