@@ -2,6 +2,7 @@ import { AuthModel, CompanyModel, UserModel } from "../db/index.js";
 import { hashPassW } from "../utils/bcrypt.js";
 import { errorRegister } from "../utils/errorsRegisterUser.js";
 import { errorsSelectCompany } from "../utils/errorsSelectCompany.js";
+import searchUserById from "../utils/searchUserById.js";
 
 export const registerUser = async (req, res) => {
   let {
@@ -13,7 +14,7 @@ export const registerUser = async (req, res) => {
     image,
     position,
     status,
-  } = req.body;
+  } = req.body.data;
 
   const errors = errorRegister(
     email,
@@ -48,9 +49,13 @@ export const registerUser = async (req, res) => {
 
     await user.setAuth(auth);
 
-    res.status(200).json({ message: "Registered user successfully" });
+    const token = 1000;
+    const userData = await searchUserById(auth.userId);
+
+    res.status(200).json({ token, userData });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
+    console.log(error.message);
   }
 };
 

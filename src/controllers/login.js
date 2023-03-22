@@ -1,5 +1,6 @@
 import { AuthModel, CompanyModel, UserModel } from "../db/index.js";
 import { comparePass } from "../utils/bcrypt.js";
+import searchUserById from "../utils/searchUserById.js";
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -13,18 +14,14 @@ export const login = async (req, res) => {
     const isCorrectPassword =
       authUser && (await comparePass(password, authUser.password));
 
-    if (!authUser) return res.status(401).json({ message: "User not found" });
+    if (!authUser) return res.status(404).json({ message: "User not found" });
     if (!isCorrectPassword)
       return res.status(401).json({ message: "Incorrect password" });
 
     if (isCorrectPassword) {
-      const userData = await UserModel.findOne({
-        where: {
-          id: [authUser.userId],
-        },
-        include: [{ model: AuthModel }, { model: CompanyModel, as: "company" }],
-      });
-      res.status(200).json({ userData });
+      const userData = await searchUserById(authUser.userId);
+      const token = 1000;
+      res.status(200).json({ userData, token });
     }
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
