@@ -4,7 +4,11 @@ export const getAllUser = async (req, res) => {
   try {
     const allUsers = await UserModel.findAll({
       include: [
-        { model: AuthModel, required: false },
+        {
+          model: AuthModel,
+          required: false,
+          attributes: { exclude: ["password"] },
+        },
         { model: CompanyModel, as: "company", required: false },
       ],
     });
@@ -49,14 +53,30 @@ export const deleteUser = async (req, res) => {
   const { idUser } = req.body;
 
   try {
-    const userDeleted = await UserModel.destroy({
+    const user = await UserModel.findOne({
       where: {
         id: idUser,
       },
+      include: [
+        {
+          model: AuthModel,
+          as: "auth",
+        },
+      ],
     });
-    userDeleted !== 0
-      ? res.status(200).json({ message: "User deleted" })
-      : res.status(404).json({ message: "User not found" });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const authDeleted = await user.auth.destroy();
+
+    if (authDeleted) {
+      const userDeleted = await user.destroy();
+      return res.status(200).json({ message: "User deleted" });
+    } else {
+      return res.status(500).json({ errorMessage: "Failed to delete user" });
+    }
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
