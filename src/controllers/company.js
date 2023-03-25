@@ -13,18 +13,40 @@ export const getCompanies = async (req, res) => {
 
 export const registerCompany = async (req, res) => {
   try {
-    const { name, image, associatedCompany, idUser } = req.body;
+    const { name, image, code, associatedCompany, codeAssociated, idUser } =
+      req.body.company;
+
     const allCompanies = await CompanyModel.findAll();
     const existingCompanies = allCompanies.map((e) => e.name);
+    const theAssociateExist = existingCompanies.includes(associatedCompany);
 
     if (existingCompanies.includes(name)) {
       return res
         .status(406)
         .json({ message: "There is already a company with that name" });
     }
+
+    if (associatedCompany !== "") {
+      if (theAssociateExist) {
+        const companyAssociatedData = allCompanies.filter(
+          (company) => company.name === associatedCompany
+        );
+        if (companyAssociatedData.code !== codeAssociated) {
+          return res.status(401).json({ message: "Wrong partner code" });
+        }
+      }
+
+      if (!theAssociateExist) {
+        return res
+          .status(404)
+          .json({ message: `There is no company ${associatedCompany}` });
+      }
+    }
+
     const company = await CompanyModel.create({
       name,
       image,
+      code,
       associatedCompany,
       userId: idUser,
     });
@@ -33,7 +55,7 @@ export const registerCompany = async (req, res) => {
 
     await user.setCompany(company);
 
-    res.status(200).json({ message: "Company Created" });
+    res.status(200).json({ company: "Company Created", user: user });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
@@ -56,14 +78,16 @@ export const deleteCompany = async (req, res) => {
 };
 
 export const updateCompany = async (req, res) => {
-  const { id, name, image, associatedCompany } = req.body;
+  const { id, name, code, image, associatedCompany, codeAssociated } = req.body;
 
   try {
     const updated = await CompanyModel.update(
       {
         name,
         image,
+        code,
         associatedCompany,
+        codeAssociated,
       },
       { where: { id: id } }
     );
