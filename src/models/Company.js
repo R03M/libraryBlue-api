@@ -17,6 +17,10 @@ export const Company = (sequelize) =>
         type: DataTypes.STRING,
         allowNull: false,
       },
+      code: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       associatedCompany: {
         type: DataTypes.STRING,
         allowNull: true,
