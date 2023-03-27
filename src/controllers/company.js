@@ -1,4 +1,5 @@
 import { CompanyModel, UserModel } from "../db/index.js";
+import { errorsSelectCompany } from "../utils/errorsSelectCompany.js";
 
 export const getCompanies = async (req, res) => {
   try {
@@ -78,7 +79,7 @@ export const deleteCompany = async (req, res) => {
 };
 
 export const updateCompany = async (req, res) => {
-  const { id, name, code, image, associatedCompany, codeAssociated } = req.body;
+  const { id, name, code, image, associatedCompany } = req.body;
 
   try {
     const updated = await CompanyModel.update(
@@ -87,13 +88,35 @@ export const updateCompany = async (req, res) => {
         image,
         code,
         associatedCompany,
-        codeAssociated,
       },
       { where: { id: id } }
     );
 
     res.status(200).json({ message: "Update successful", updated });
   } catch (error) {
+    res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+export const selectCompany = async (req, res) => {
+  const { nameCompany, idUser } = req.body.selectCompanyInf;
+  
+  try {
+    const company = await CompanyModel.findOne({
+      where: {
+        name: nameCompany,
+      },
+    });
+
+    const user = await UserModel.findByPk(idUser);
+
+    const errors = errorsSelectCompany(company, user);
+    if (errors) return res.status(400).json(errors);
+
+    await company.addUser(idUser);
+    res.status(200).json({ message: "Updated", user: user });
+  } catch (error) {
+    console.log(error.message)
     res.status(500).json({ errorMessage: error.message });
   }
 };

@@ -51,16 +51,13 @@ export const Item = (sequelize) =>
         },
       },
       lastCount: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
       },
       lastCountDate: {
         type: DataTypes.DATE,
       },
-      lastDischarge: {
-        type: DataTypes.INTEGER,
-      },
-      itemEntry: {
-        type: DataTypes.INTEGER,
+      currentCount: {
+        type: DataTypes.FLOAT,
       },
       itemEntryDate: {
         type: DataTypes.DATE,

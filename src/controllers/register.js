@@ -1,7 +1,6 @@
-import { AuthModel, CompanyModel, UserModel } from "../db/index.js";
+import { AuthModel, UserModel } from "../db/index.js";
 import { hashPassW } from "../utils/bcrypt.js";
 import { errorRegister } from "../utils/errorsRegisterUser.js";
-import { errorsSelectCompany } from "../utils/errorsSelectCompany.js";
 import searchUserById from "../utils/searchUserById.js";
 
 export const registerUser = async (req, res) => {
@@ -79,18 +78,3 @@ export const checkEmail = async (req, res) => {
   }
 };
 
-export const selectCompany = async (req, res) => {
-  const { idCompany, idUser } = req.body;
-  try {
-    const company = await CompanyModel.findByPk(idCompany);
-    const user = await UserModel.findByPk(idUser);
-
-    const errors = errorsSelectCompany(company, user);
-    if (errors) return res.status(400).json(errors);
-
-    await company.addUser(idUser);
-    res.status(200).json({ message: "Updated" });
-  } catch (error) {
-    res.status(500).json({ errorMessage: error.message });
-  }
-};

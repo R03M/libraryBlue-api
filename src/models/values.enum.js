@@ -8,7 +8,7 @@ export const POSITION = {
 export const STATUS = {
   ACTIVE: "Active",
   INACTIVE: "Inactive",
-  BAN: "Ban",
+  BAN: "Ban"
 };
 
 export const EDITION = {

@@ -1,4 +1,6 @@
 import { AuthModel, CompanyModel, UserModel } from "../db/index.js";
+import pkg from "lodash";
+const { isEqual } = pkg;
 
 export const getAllUser = async (req, res) => {
   try {
@@ -72,11 +74,30 @@ export const deleteUser = async (req, res) => {
     const authDeleted = await user.auth.destroy();
 
     if (authDeleted) {
-      const userDeleted = await user.destroy();
+      await user.destroy();
       return res.status(200).json({ message: "User deleted" });
     } else {
       return res.status(500).json({ errorMessage: "Failed to delete user" });
     }
+  } catch (error) {
+    res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+export const validateData = async (req, res) => {
+  const data = req.body;
+  
+  try {
+    const user = await UserModel.findOne({
+      where: {
+        id: data.id,
+      },
+      raw: true,
+    });
+
+    return isEqual(data, user)
+      ? res.status(200).json({ message: "User data is valid" })
+      : res.status(406).json({ message: "User data is invalid" });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
