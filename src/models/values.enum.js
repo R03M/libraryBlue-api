@@ -12,20 +12,24 @@ export const STATUS = {
 };
 
 export const EDITION = {
+  N_A: "N/A",
   PUBLIC: "Public",
   STUDY: "Study",
 };
 
 export const LETTER = {
+  N_A: "N/A",
   BIG: "Big",
   NORMAL: "Normal",
 };
 
 export const CATEGORY = {
+  N_A: "N/A",
   MAGAZINES: "Magazines",
   BOOKS: "Books",
   BROCHURES: "Brochures",
   ACTIVITY_GUIDE: "Activity Guide",
-  OTHERS: "Others",
   TREATIES: "Treaties",
+  CARDS: "Cards",
+  OTHERS: "Others",
 };
