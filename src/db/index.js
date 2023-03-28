@@ -18,7 +18,7 @@ user.belongsTo(company, { as: "company", foreignKey: "companyId" });
 company.hasMany(item, { as: "items" });
 item.belongsTo(company, { as: "company", foreignKey: "companyId" });
 
-export const syncDB = () => dbConfig.sync({ force: false });
+export const syncDB = () => dbConfig.sync({ alter: true });
 
 export {
   user as UserModel,

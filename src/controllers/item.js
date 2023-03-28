@@ -4,15 +4,20 @@ export const getItemByCompany = async (req, res) => {
   try {
     const { idCompany, idAssociatedCompany } = req.body;
 
-    const associateItems = await ItemModel.findAll({
-      where: { companyId: idAssociatedCompany, associatedCompany: true },
-    });
-
     const companyItems = await ItemModel.findAll({
       where: { companyId: idCompany },
     });
 
-    res.status(200).json({ companyItems, associateItems });
+    if (idAssociatedCompany) {
+      const associateItems = await ItemModel.findAll({
+        where: { companyId: idAssociatedCompany, associatedCompany: true },
+      });
+      res
+        .status(200)
+        .json({ allItems: { ...companyItems, ...associateItems } });
+      return;
+    }
+    res.status(200).json({ allItems: companyItems });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
@@ -29,12 +34,11 @@ export const createItem = async (req, res) => {
     letter,
     lastCount,
     lastCountDate,
-    lastDischarge,
-    itemEntry,
+    currentCount,
     itemEntryData,
     category,
     associatedCompany,
-  } = req.body;
+  } = req.body.item;
 
   try {
     const company = await CompanyModel.findByPk(idCompany);
@@ -62,8 +66,7 @@ export const createItem = async (req, res) => {
       letter,
       lastCount,
       lastCountDate,
-      lastDischarge,
-      itemEntry,
+      currentCount,
       itemEntryData,
       category,
       associatedCompany,
