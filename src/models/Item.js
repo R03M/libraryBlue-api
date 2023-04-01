@@ -58,6 +58,9 @@ export const Item = (sequelize) =>
       currentCount: {
         type: DataTypes.FLOAT,
       },
+      itemEntry: {
+        type: DataTypes.FLOAT,
+      },
       itemEntryDate: {
         type: DataTypes.DATE,
       },

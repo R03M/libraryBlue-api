@@ -35,6 +35,7 @@ export const createItem = async (req, res) => {
     lastCount,
     lastCountDate,
     currentCount,
+    itemEntry,
     itemEntryData,
     category,
     associatedCompany,
@@ -67,6 +68,7 @@ export const createItem = async (req, res) => {
       lastCount,
       lastCountDate,
       currentCount,
+      itemEntry,
       itemEntryData,
       category,
       associatedCompany,
@@ -92,7 +94,6 @@ export const updateItem = async (req, res) => {
     letter,
     lastCount,
     lastCountDate,
-    lastDischarge,
     itemEntry,
     itemEntryData,
     category,
@@ -118,7 +119,6 @@ export const updateItem = async (req, res) => {
     letter ? (item.letter = letter) : null;
     lastCount ? (item.lastCount = lastCount) : null;
     lastCountDate ? (item.lastCountDate = lastCountDate) : null;
-    lastDischarge ? (item.lastDischarge = lastDischarge) : null;
     itemEntry ? (item.itemEntry = itemEntry) : null;
     itemEntryData ? (item.itemEntryData = itemEntryData) : null;
     category ? (item.category = category) : null;
@@ -134,6 +134,7 @@ export const updateItem = async (req, res) => {
 
 export const deleteItem = async (req, res) => {
   const { idItem } = req.body;
+
   try {
     const itemDelete = await ItemModel.destroy({
       where: {
@@ -141,7 +142,9 @@ export const deleteItem = async (req, res) => {
       },
     });
     itemDelete !== 0
-      ? res.status(201).json({ message: "Item successfully removed" })
+      ? res
+          .status(201)
+          .json({ message: "Item successfully removed", id: idItem })
       : res.status(404).json({ message: "Item not found" });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });

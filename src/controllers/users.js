@@ -86,7 +86,7 @@ export const deleteUser = async (req, res) => {
 
 export const validateData = async (req, res) => {
   const data = req.body;
-  
+
   try {
     const user = await UserModel.findOne({
       where: {
@@ -94,10 +94,11 @@ export const validateData = async (req, res) => {
       },
       raw: true,
     });
-
-    return isEqual(data, user)
-      ? res.status(200).json({ message: "User data is valid" })
-      : res.status(406).json({ message: "User data is invalid" });
+    setTimeout(() => {
+      return isEqual(data, user)
+        ? res.status(200).json({ message: "User data is valid" })
+        : res.status(406).json({ message: "User data is invalid" });
+    }, 5000);
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
