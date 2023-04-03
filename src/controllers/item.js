@@ -94,11 +94,13 @@ export const updateItem = async (req, res) => {
     letter,
     lastCount,
     lastCountDate,
+    currentCount,
     itemEntry,
     itemEntryData,
     category,
     associatedCompany,
-  } = req.body;
+    exitOnly,
+  } = req.body.item;
 
   try {
     const companyExists = await CompanyModel.findOne({
@@ -111,22 +113,28 @@ export const updateItem = async (req, res) => {
     }
     const item = await ItemModel.findByPk(id);
 
-    code ? (item.code = code) : null;
-    name ? (item.name = name) : null;
-    language ? (item.language = language) : null;
-    image ? (item.image = image) : null;
-    edition ? (item.edition = edition) : null;
-    letter ? (item.letter = letter) : null;
-    lastCount ? (item.lastCount = lastCount) : null;
-    lastCountDate ? (item.lastCountDate = lastCountDate) : null;
-    itemEntry ? (item.itemEntry = itemEntry) : null;
-    itemEntryData ? (item.itemEntryData = itemEntryData) : null;
-    category ? (item.category = category) : null;
-    associatedCompany ? (item.associatedCompany = associatedCompany) : null;
+    if (!exitOnly) {
+      code ? (item.code = code) : null;
+      name ? (item.name = name) : null;
+      language ? (item.language = language) : null;
+      image ? (item.image = image) : null;
+      edition ? (item.edition = edition) : null;
+      letter ? (item.letter = letter) : null;
+      lastCount ? (item.lastCount = lastCount) : null;
+      currentCount ? (item.currentCount = currentCount) : null;
+      lastCountDate ? (item.lastCountDate = lastCountDate) : null;
+      itemEntry ? (item.itemEntry = itemEntry) : null;
+      itemEntryData ? (item.itemEntryData = itemEntryData) : null;
+      category ? (item.category = category) : null;
+      associatedCompany ? (item.associatedCompany = associatedCompany) : null;
+    }
+    if (exitOnly) {      
+      item.currentCount = item.currentCount - currentCount  ;
+    }
 
     await item.save();
 
-    res.status(200).json(item);
+    res.status(200).json({ itemUpdated: item });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
