@@ -1,5 +1,6 @@
 import { AuthModel, CompanyModel, UserModel } from "../db/index.js";
 import pkg from "lodash";
+import searchUserById from "../utils/searchUserById.js";
 const { isEqual } = pkg;
 
 export const getAllUser = async (req, res) => {
@@ -23,7 +24,7 @@ export const getAllUser = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const { id, firstName, lastName, image } = req.body;
+  const { id, firstName, lastName, image } = req.body.data;
 
   try {
     const user = await UserModel.findByPk(id);
@@ -46,8 +47,11 @@ export const updateUser = async (req, res) => {
 
     await user.save();
 
-    res.status(200).json({ message: "Update successful" });
+    const userData = await searchUserById(id);
+
+    res.status(200).json({ userData });
   } catch (error) {
+    console.log({ errorMessage: error.message });
     res.status(505).json({ errorMessage: error.message });
   }
 };

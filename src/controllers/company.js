@@ -100,7 +100,7 @@ export const updateCompany = async (req, res) => {
 
 export const selectCompany = async (req, res) => {
   const { nameCompany, idUser } = req.body.selectCompanyInf;
-  
+
   try {
     const company = await CompanyModel.findOne({
       where: {
@@ -116,7 +116,21 @@ export const selectCompany = async (req, res) => {
     await company.addUser(idUser);
     res.status(200).json({ message: "Updated", user: user });
   } catch (error) {
-    console.log(error.message)
+    res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+export const allCompanyUsers = async (req, res) => {
+  const { companyName } = req.body;
+  try {
+    const allCompanyUsers = await CompanyModel.findOne({
+      where: {
+        name: companyName,
+      },
+      include: { model: UserModel, as: "users" },
+    });
+    res.status(200).json({ allCompanyUsers });
+  } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
 };
