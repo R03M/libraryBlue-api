@@ -2,11 +2,19 @@ import { CompanyModel, UserModel } from "../db/index.js";
 import { errorsSelectCompany } from "../utils/errorsSelectCompany.js";
 
 export const getCompanies = async (req, res) => {
+  const { idCompany } = req.body;
   try {
     const allCompanies = await CompanyModel.findAll();
-    allCompanies.length
-      ? res.status(200).json({ allCompanies })
-      : res.status(201).json({ allCompanies: "No Companies for now" });
+
+    if (idCompany) {
+      const companies = allCompanies.filter((e) => e.id !== idCompany);
+      companies.length > 0
+        ? res.status(200).json(companies)
+        : res.sendStatus(204);
+      return;
+    }
+
+    res.status(200).json({ allCompanies });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
@@ -123,13 +131,46 @@ export const selectCompany = async (req, res) => {
 export const allCompanyUsers = async (req, res) => {
   const { companyName } = req.body;
   try {
-    const allCompanyUsers = await CompanyModel.findOne({
+    const allUsers = await CompanyModel.findOne({
       where: {
         name: companyName,
       },
       include: { model: UserModel, as: "users" },
     });
-    res.status(200).json({ allCompanyUsers });
+
+    const allCompanyUsers = allUsers.users.filter(
+      (user) => user.position !== "Manager"
+    );
+    allCompanyUsers.length > 0
+      ? res.status(200).json({allCompanyUsers})
+      : res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+export const rmUserOfCompany = async (req, res) => {
+  const { idUser } = req.body;
+
+  try {
+    const user = await UserModel.findOne({
+      where: {
+        id: idUser,
+      },
+      include: [
+        {
+          model: CompanyModel,
+          as: "company",
+        },
+      ],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await user.removeCompany();
+
+    res.status(200).json({ user });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }

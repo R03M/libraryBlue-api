@@ -98,11 +98,9 @@ export const validateData = async (req, res) => {
       },
       raw: true,
     });
-    setTimeout(() => {
-      return isEqual(data, user)
-        ? res.status(200).json({ message: "User data is valid" })
-        : res.status(406).json({ message: "User data is invalid" });
-    }, 5000);
+    return isEqual(data, user)
+      ? res.status(200).json({ message: "User data is valid" })
+      : res.status(406).json({ message: "User data is invalid" });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
