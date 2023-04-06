@@ -27,7 +27,8 @@ export const createItem = async (req, res) => {
   const {
     idCompany,
     code,
-    name,
+    title,
+    subtitle,
     language,
     image,
     edition,
@@ -60,7 +61,8 @@ export const createItem = async (req, res) => {
 
     const newItem = await ItemModel.create({
       code,
-      name,
+      title,
+      subtitle,
       language,
       image,
       edition,
@@ -87,7 +89,8 @@ export const updateItem = async (req, res) => {
     idCompany,
     id,
     code,
-    name,
+    title,
+    subtitle,
     language,
     image,
     edition,
@@ -115,7 +118,8 @@ export const updateItem = async (req, res) => {
 
     if (!exitOnly) {
       code ? (item.code = code) : null;
-      name ? (item.name = name) : null;
+      title ? (item.title = title) : null;
+      subtitle ? (item.subtitle = subtitle) : null;
       language ? (item.language = language) : null;
       image ? (item.image = image) : null;
       edition ? (item.edition = edition) : null;
@@ -128,8 +132,8 @@ export const updateItem = async (req, res) => {
       category ? (item.category = category) : null;
       associatedCompany ? (item.associatedCompany = associatedCompany) : null;
     }
-    if (exitOnly) {      
-      item.currentCount = item.currentCount - currentCount  ;
+    if (exitOnly) {
+      item.currentCount = item.currentCount - currentCount;
     }
 
     await item.save();
@@ -156,5 +160,35 @@ export const deleteItem = async (req, res) => {
       : res.status(404).json({ message: "Item not found" });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+export const createManyItems = async (req, res) => {
+  const { idCompany, data } = req.body;
+  try {
+    const company = await CompanyModel.findByPk(idCompany);
+    if (!company) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+    const items = Object.values(data);
+    await Promise.all(
+      items.map(async (item) => {
+        const newItem = await ItemModel.create({
+          code: item.code,
+          title: item.title,
+          subtitle: item.subtitle,
+          language: item.language,
+          image: item.image,
+          edition: item.edition,
+          letter: item.letter,
+          category: item.category,
+          associatedCompany: item.associatedCompany,
+        });
+        await newItem.setCompany(company);
+      })
+    );
+    res.status(201).json({ message: "Items created successfully" });
+  } catch (error) {
+    res.status(505).json({ errorMessage: error.message });
   }
 };
