@@ -1,6 +1,10 @@
+import "dotenv/config";
 import { AuthModel, CompanyModel, UserModel } from "../db/index.js";
 import { comparePass } from "../utils/bcrypt.js";
 import searchUserById from "../utils/searchUserById.js";
+import jwt from "jsonwebtoken";
+const { JWT_SECRET } = process.env;
+
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -20,7 +24,8 @@ export const login = async (req, res) => {
 
     if (isCorrectPassword) {
       const userData = await searchUserById(authUser.userId);
-      const token = 1000;
+      const token = jwt.sign({ userId: authUser.id }, JWT_SECRET);
+
       res.status(200).json({ userData, token });
     }
   } catch (error) {
