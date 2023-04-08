@@ -165,7 +165,7 @@ export const deleteItem = async (req, res) => {
 
 export const createManyItems = async (req, res) => {
   const { idCompany, data } = req.body;
-  console.log(req.body)
+ 
   try {
     const company = await CompanyModel.findByPk(idCompany);
     if (!company) {
