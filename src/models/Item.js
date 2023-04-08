@@ -96,5 +96,12 @@ export const Item = (sequelize) =>
     },
     {
       timestamps: false,
+      hooks: {
+        beforeCreate: (item) => {
+          if (item.subtitle === null) {
+            item.subtitle = "N/A";
+          }
+        },
+      },
     }
   );
