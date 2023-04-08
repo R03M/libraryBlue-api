@@ -47,16 +47,16 @@ export const createItem = async (req, res) => {
     const items = await ItemModel.findAll({
       where: { companyId: company.id },
     });
-    const nameItems = items.map((e) => e.name);
+    const titleItems = items.map((e) => e.title);
 
     if (!company) {
       return res.status(404).json({ error: "Company not found" });
     }
 
-    if (nameItems.includes(name)) {
+    if (titleItems.includes(title)) {
       return res
         .status(404)
-        .json({ error: "An item with that name already exists" });
+        .json({ error: "An item with that title already exists" });
     }
 
     const newItem = await ItemModel.create({
@@ -165,6 +165,7 @@ export const deleteItem = async (req, res) => {
 
 export const createManyItems = async (req, res) => {
   const { idCompany, data } = req.body;
+  console.log(req.body)
   try {
     const company = await CompanyModel.findByPk(idCompany);
     if (!company) {
@@ -187,8 +188,12 @@ export const createManyItems = async (req, res) => {
         await newItem.setCompany(company);
       })
     );
-    res.status(201).json({ message: "Items created successfully" });
+    const newItems = await ItemModel.findAll({
+      where: { companyId: idCompany },
+    });
+    res.status(201).json({ allItems: newItems });
   } catch (error) {
+    console.log({ errorMessage: error.message });
     res.status(505).json({ errorMessage: error.message });
   }
 };
