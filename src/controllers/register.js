@@ -1,7 +1,10 @@
+import "dotenv/config";
 import { AuthModel, UserModel } from "../db/index.js";
 import { hashPassW } from "../utils/bcrypt.js";
 import { errorRegister } from "../utils/errorsRegisterUser.js";
 import searchUserById from "../utils/searchUserById.js";
+import jwt from "jsonwebtoken";
+const { JWT_SECRET } = process.env;
 
 export const registerUser = async (req, res) => {
   let {
@@ -48,7 +51,8 @@ export const registerUser = async (req, res) => {
 
     await user.setAuth(auth);
 
-    const token = 1000;
+    const token = jwt.sign({ userId: auth.userId }, JWT_SECRET);
+
     const userData = await searchUserById(auth.userId);
 
     res.status(200).json({ token, userData });
@@ -77,4 +81,3 @@ export const checkEmail = async (req, res) => {
     res.status(500).json({ errorMessage: error.message });
   }
 };
-
