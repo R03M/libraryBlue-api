@@ -105,3 +105,31 @@ export const validateData = async (req, res) => {
     res.status(500).json({ errorMessage: error.message });
   }
 };
+
+export const updatePositionUser = async (req, res) => {
+  const { id, position } = req.body.data;
+
+  try {
+    const user = await UserModel.findByPk(id);
+
+    if (!position) {
+      return res.status(400).json({ message: "Position is required" });
+    }
+    if (!user) {
+      return res.status(404).json({ message: "The user does not exist" });
+    }
+
+    user.position = position;
+
+    await user.save();
+
+    const userData = await searchUserById(id);
+
+    setTimeout(() => {
+      res.status(200).json({ userData });
+    }, 5000);
+  } catch (error) {
+    console.log({ errorMessage: error.message });
+    res.status(505).json({ errorMessage: error.message });
+  }
+};
