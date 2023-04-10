@@ -87,20 +87,18 @@ export const deleteCompany = async (req, res) => {
 };
 
 export const updateCompany = async (req, res) => {
-  const { id, name, code, image, associatedCompany } = req.body;
+  const { id, code, image, associatedCompany } = req.body.dataCompany;
 
   try {
-    const updated = await CompanyModel.update(
-      {
-        name,
-        image,
-        code,
-        associatedCompany,
-      },
-      { where: { id: id } }
-    );
+    const company = await CompanyModel.findByPk(id);
 
-    res.status(200).json({ message: "Update successful", updated });
+    code ? (company.code = code) : null;
+    image ? (company.image = image) : null;
+    associatedCompany ? (company.associatedCompany = associatedCompany) : null;
+
+    await company.save();
+
+    res.status(200).json({ message: "Update successful"});
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
@@ -142,7 +140,7 @@ export const allCompanyUsers = async (req, res) => {
       (user) => user.position !== "Manager"
     );
     allCompanyUsers.length > 0
-      ? res.status(200).json({allCompanyUsers})
+      ? res.status(200).json({ allCompanyUsers })
       : res.sendStatus(204);
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });

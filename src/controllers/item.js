@@ -2,23 +2,26 @@ import { ItemModel, CompanyModel } from "../db/index.js";
 
 export const getItemByCompany = async (req, res) => {
   try {
-    const { idCompany, idAssociatedCompany } = req.body;
+    const { idCompany, associatedCompany } = req.body;
 
     const companyItems = await ItemModel.findAll({
       where: { companyId: idCompany },
     });
 
-    if (idAssociatedCompany) {
-      const associateItems = await ItemModel.findAll({
-        where: { companyId: idAssociatedCompany, associatedCompany: true },
+    let allItems = [...companyItems];
+
+    if (associatedCompany) {
+      const idAssociatedCompany = await CompanyModel.findOne({
+        where: { name: associatedCompany },
       });
-      res
-        .status(200)
-        .json({ allItems: { ...companyItems, ...associateItems } });
-      return;
+      const associateItems = await ItemModel.findAll({
+        where: { companyId: idAssociatedCompany.id, associatedCompany: true },
+      });
+      allItems = [...allItems, ...associateItems];
     }
-    res.status(200).json({ allItems: companyItems });
+    res.status(200).json({allItems});
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({ errorMessage: error.message });
   }
 };
@@ -86,7 +89,6 @@ export const createItem = async (req, res) => {
 
 export const updateItem = async (req, res) => {
   const {
-    idCompany,
     id,
     code,
     title,
@@ -106,14 +108,7 @@ export const updateItem = async (req, res) => {
   } = req.body.item;
 
   try {
-    const companyExists = await CompanyModel.findOne({
-      where: { id: idCompany },
-    });
-    if (!companyExists) {
-      return res
-        .status(400)
-        .json({ errorMessage: "The company does not exist" });
-    }
+    
     const item = await ItemModel.findByPk(id);
 
     if (!exitOnly) {
@@ -165,7 +160,7 @@ export const deleteItem = async (req, res) => {
 
 export const createManyItems = async (req, res) => {
   const { idCompany, data } = req.body;
- 
+
   try {
     const company = await CompanyModel.findByPk(idCompany);
     if (!company) {
