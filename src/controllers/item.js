@@ -1,4 +1,5 @@
-import { ItemModel, CompanyModel } from "../db/index.js";
+import { ItemModel, CompanyModel, UserModel } from "../db/index.js";
+import { POSITION } from "../models/values.enum.js";
 
 export const getItemByCompany = async (req, res) => {
   try {
@@ -19,7 +20,7 @@ export const getItemByCompany = async (req, res) => {
       });
       allItems = [...allItems, ...associateItems];
     }
-    res.status(200).json({allItems});
+    res.status(200).json({ allItems });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ errorMessage: error.message });
@@ -29,6 +30,7 @@ export const getItemByCompany = async (req, res) => {
 export const createItem = async (req, res) => {
   const {
     idCompany,
+    idUser,
     code,
     title,
     subtitle,
@@ -46,6 +48,14 @@ export const createItem = async (req, res) => {
   } = req.body.item;
 
   try {
+    const user = await UserModel.findByPk(idUser);
+    if (user.position === POSITION.OBSERVANT) {
+      res.status(401).json({
+        message:
+          "You have to be an administrator or a helper to be able to create an item.",
+      });
+      return;
+    }
     const company = await CompanyModel.findByPk(idCompany);
     const items = await ItemModel.findAll({
       where: { companyId: company.id },
@@ -105,10 +115,18 @@ export const updateItem = async (req, res) => {
     category,
     associatedCompany,
     exitOnly,
+    idUser,
   } = req.body.item;
 
   try {
-    
+    const user = await UserModel.findByPk(idUser);
+    if (user.position === POSITION.OBSERVANT) {
+      res.status(401).json({
+        message:
+          "You have to be a manager or helper to be able to update an item.",
+      });
+      return;
+    }
     const item = await ItemModel.findByPk(id);
 
     if (!exitOnly) {
@@ -140,9 +158,17 @@ export const updateItem = async (req, res) => {
 };
 
 export const deleteItem = async (req, res) => {
-  const { idItem } = req.body;
+  const { idItem, idUser } = req.body;
 
   try {
+    const user = await UserModel.findByPk(idUser);
+    if (user.position === POSITION.OBSERVANT) {
+      res.status(401).json({
+        message:
+          "You have to be a manager or helper to be able to delete an item.",
+      });
+      return;
+    }
     const itemDelete = await ItemModel.destroy({
       where: {
         id: idItem,
@@ -188,7 +214,6 @@ export const createManyItems = async (req, res) => {
     });
     res.status(201).json({ allItems: newItems });
   } catch (error) {
-    console.log({ errorMessage: error.message });
     res.status(505).json({ errorMessage: error.message });
   }
 };
