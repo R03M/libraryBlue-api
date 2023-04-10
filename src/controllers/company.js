@@ -1,4 +1,5 @@
 import { CompanyModel, UserModel } from "../db/index.js";
+import { POSITION } from "../models/values.enum.js";
 import { errorsSelectCompany } from "../utils/errorsSelectCompany.js";
 
 export const getCompanies = async (req, res) => {
@@ -98,7 +99,7 @@ export const updateCompany = async (req, res) => {
 
     await company.save();
 
-    res.status(200).json({ message: "Update successful"});
+    res.status(200).json({ message: "Update successful" });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
@@ -106,7 +107,7 @@ export const updateCompany = async (req, res) => {
 
 export const selectCompany = async (req, res) => {
   const { nameCompany, idUser } = req.body.selectCompanyInf;
-
+  console.log(req.body);
   try {
     const company = await CompanyModel.findOne({
       where: {
@@ -163,12 +164,19 @@ export const rmUserOfCompany = async (req, res) => {
       ],
     });
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    await user.removeCompany();
+    user.position = POSITION.OBSERVANT;
 
-    res.status(200).json({ user });
+    const company = user.company;
+
+    if (!company) {
+      return res
+        .status(404)
+        .json({ message: "User is not associated with any company" });
+    }
+    await user.save();
+    await company.removeUser(user);
+
+    res.status(200).json({ userDeleted: user.id });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
