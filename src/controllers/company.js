@@ -1,6 +1,7 @@
 import { CompanyModel, UserModel } from "../db/index.js";
 import { POSITION } from "../models/values.enum.js";
 import { errorsSelectCompany } from "../utils/errorsSelectCompany.js";
+import searchUserById from "../utils/searchUserById.js";
 
 export const getCompanies = async (req, res) => {
   const { idCompany } = req.body;
@@ -107,7 +108,7 @@ export const updateCompany = async (req, res) => {
 
 export const selectCompany = async (req, res) => {
   const { nameCompany, idUser } = req.body.selectCompanyInf;
-  console.log(req.body);
+  
   try {
     const company = await CompanyModel.findOne({
       where: {
@@ -121,7 +122,10 @@ export const selectCompany = async (req, res) => {
     if (errors) return res.status(400).json(errors);
 
     await company.addUser(idUser);
-    res.status(200).json({ message: "Updated", user: user });
+
+    const userData = await searchUserById(idUser);
+
+    res.status(200).json({ message: "Updated", userData });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
