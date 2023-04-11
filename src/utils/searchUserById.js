@@ -5,7 +5,10 @@ const searchUserById = async (userId) => {
     where: {
       id: [userId],
     },
-    include: [{ model: AuthModel }, { model: CompanyModel, as: "company" }],
+    include: [
+      { model: AuthModel, attributes: { exclude: ["password"] } },
+      { model: CompanyModel, as: "company" },
+    ],
   });
 };
 
