@@ -22,7 +22,6 @@ export const getItemByCompany = async (req, res) => {
     }
     res.status(200).json({ allItems });
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({ errorMessage: error.message });
   }
 };

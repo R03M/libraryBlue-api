@@ -51,7 +51,6 @@ export const updateUser = async (req, res) => {
 
     res.status(200).json({ userData });
   } catch (error) {
-    console.log({ errorMessage: error.message });
     res.status(505).json({ errorMessage: error.message });
   }
 };
@@ -127,7 +126,6 @@ export const updatePositionUser = async (req, res) => {
 
     res.status(200).json({ userData });
   } catch (error) {
-    console.log({ errorMessage: error.message });
     res.status(505).json({ errorMessage: error.message });
   }
 };

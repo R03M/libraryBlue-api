@@ -15,7 +15,7 @@ router.post("/all", getCompanies);
 router.post("/new", registerCompany);
 router.put("/update", updateCompany);
 router.delete("/rmUserOfCompany", rmUserOfCompany);
-router.delete("/delete", deleteCompany);
+router.delete("/deleteCompany", deleteCompany);
 router.post("/selectCompany", selectCompany);
 router.post("/allCompanyUsers", allCompanyUsers);
 

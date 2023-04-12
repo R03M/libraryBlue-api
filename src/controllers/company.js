@@ -66,7 +66,9 @@ export const registerCompany = async (req, res) => {
 
     await user.setCompany(company);
 
-    res.status(200).json({ company: "Company Created", user: user });
+    const userCurrent = await searchUserById(idUser);
+
+    res.status(200).json({ userData: userCurrent });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
@@ -74,10 +76,10 @@ export const registerCompany = async (req, res) => {
 
 export const deleteCompany = async (req, res) => {
   try {
-    const { nameCompany } = req.body;
+    const { idCompany } = req.body;
     const companyDelete = await CompanyModel.destroy({
       where: {
-        name: nameCompany,
+        id: idCompany,
       },
     });
     companyDelete !== 0
@@ -90,7 +92,7 @@ export const deleteCompany = async (req, res) => {
 
 export const updateCompany = async (req, res) => {
   const { id, code, image, associatedCompany } = req.body.dataCompany;
-
+  
   try {
     const company = await CompanyModel.findByPk(id);
 
@@ -100,7 +102,7 @@ export const updateCompany = async (req, res) => {
 
     await company.save();
 
-    res.status(200).json({ message: "Update successful" });
+    res.status(200).json({ company });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
@@ -108,7 +110,7 @@ export const updateCompany = async (req, res) => {
 
 export const selectCompany = async (req, res) => {
   const { nameCompany, idUser } = req.body.selectCompanyInf;
-  
+
   try {
     const company = await CompanyModel.findOne({
       where: {
