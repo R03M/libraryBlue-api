@@ -4,12 +4,18 @@ import { TokenModel, UserModel } from "../db/index.js";
 const { JWT_SECRET } = process.env;
 
 export const genarateTokens = async (idUser) => {
-  const user = UserModel.findByPk(idUser);
-  const token = jwt.sign({ idUser }, JWT_SECRET, { expiresIn: "7d" });
-  const newToken = await TokenModel.create({
-    token,
+  const user = await UserModel.findByPk(idUser);
+  const token = jwt.sign({ idUser: idUser }, JWT_SECRET, { expiresIn: "7d" });
+
+  const tokenSaved = await TokenModel.findOne({
+    where: {
+      user_id: idUser,
+    },
   });
-  await newToken.setUser(user);
+  await (tokenSaved
+    ? tokenSaved.update({ token })
+    : TokenModel.create({ token }).then((newToken) => newToken.setUser(user)));
+
   return token;
 };
 
