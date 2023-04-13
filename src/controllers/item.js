@@ -1,26 +1,14 @@
 import { ItemModel, CompanyModel, UserModel } from "../db/index.js";
 import { POSITION } from "../models/values.enum.js";
+import allItems from "../utils/alltems.js";
 
 export const getItemByCompany = async (req, res) => {
   try {
     const { idCompany, associatedCompany } = req.body;
 
-    const companyItems = await ItemModel.findAll({
-      where: { companyId: idCompany },
-    });
+    const items = await allItems(idCompany, associatedCompany);
 
-    let allItems = [...companyItems];
-
-    if (associatedCompany) {
-      const idAssociatedCompany = await CompanyModel.findOne({
-        where: { name: associatedCompany },
-      });
-      const associateItems = await ItemModel.findAll({
-        where: { companyId: idAssociatedCompany.id, associatedCompany: true },
-      });
-      allItems = [...allItems, ...associateItems];
-    }
-    res.status(200).json({ allItems });
+    res.status(200).json({ allItems: items });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
@@ -184,7 +172,7 @@ export const deleteItem = async (req, res) => {
 };
 
 export const createManyItems = async (req, res) => {
-  const { idCompany, data } = req.body;
+  const { idCompany, associatedCompany, data } = req.body;
 
   try {
     const company = await CompanyModel.findByPk(idCompany);
@@ -208,10 +196,10 @@ export const createManyItems = async (req, res) => {
         await newItem.setCompany(company);
       })
     );
-    const newItems = await ItemModel.findAll({
-      where: { companyId: idCompany },
-    });
-    res.status(201).json({ allItems: newItems });
+
+    const itemsUpdated = await allItems(idCompany, associatedCompany);
+
+    res.status(201).json({ allItems: itemsUpdated });
   } catch (error) {
     res.status(505).json({ errorMessage: error.message });
   }
