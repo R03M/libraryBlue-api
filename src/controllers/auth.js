@@ -70,14 +70,13 @@ export const registerUser = async (req, res) => {
 
     await user.setAuth(auth);
 
-    const token = await genarateTokens(auth.userId);
+    const token = await genarateTokens(user.id);
 
-    const userData = await searchUserById(auth.userId);
+    const userData = await searchUserById(user.id);
 
     res.status(200).json({ token, userData });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
-    console.log(error.message);
   }
 };
 
@@ -99,7 +98,8 @@ export const login = async (req, res) => {
 
     if (isCorrectPassword) {
       const userData = await searchUserById(authUser.userId);
-      const token = await genarateTokens(authUser.id);
+
+      const token = await genarateTokens(authUser.userId);
 
       res.status(200).json({ userData, token });
     }
@@ -109,12 +109,15 @@ export const login = async (req, res) => {
 };
 
 export const logOut = async (req, res) => {
-  const { userId } = req.body;
+  const { idUser } = req.body;
   try {
-    const userToken = await TokenModel.findByPk(userId);
-    userToken.token = null;
-    await userToken.save();
-    res.status(200);
+    const userToken = await TokenModel.findOne({
+      where: {
+        user_id: idUser,
+      },
+    });
+    userToken.update({ token: null });
+    res.status(200).json({ message: "Closed session" });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }
