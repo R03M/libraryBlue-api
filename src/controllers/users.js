@@ -1,6 +1,7 @@
 import { AuthModel, CompanyModel, UserModel } from "../db/index.js";
 import pkg from "lodash";
 import searchUserById from "../utils/searchUserById.js";
+import { POSITION } from "../models/values.enum.js";
 const { isEqual } = pkg;
 
 export const getAllUser = async (req, res) => {
@@ -67,11 +68,22 @@ export const deleteUser = async (req, res) => {
           model: AuthModel,
           as: "auth",
         },
+        {
+          model: CompanyModel,
+          as: "company",
+        },
       ],
     });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
+    }
+
+    const company = user.company;
+    if (company) {
+      user.position === POSITION.MANAGER
+        ? await user.company.destroy()
+        : await company.removeUser(user);
     }
 
     const authDeleted = await user.auth.destroy();

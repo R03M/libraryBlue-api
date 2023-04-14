@@ -13,23 +13,23 @@ export const STATUS = {
 
 export const EDITION = {
   NA: "N/A",
-  PUBLIC: "Public",
-  STUDY: "Study",
+  PUBLIC: "Público",
+  STUDY: "Estudio",
 };
 
 export const LETTER = {
   NA: "N/A",
-  BIG: "Big",
+  BIG: "Grande",
   NORMAL: "Normal",
 };
 
 export const CATEGORY = {
   NA: "N/A",
-  MAGAZINES: "Magazines",
-  BOOKS: "Books",
-  BROCHURES: "Brochures",
-  ACTIVITY_GUIDE: "Activity Guide",
-  TREATIES: "Treaties",
-  CARDS: "Cards",
-  OTHERS: "Others",
+  MAGAZINES: "Revistas",
+  BOOKS: "Libros",
+  BROCHURES: "Folletos",
+  ACTIVITY_GUIDE: "Guía de actividades",
+  TREATIES: "Tratados",
+  CARDS: "Tarjetas",
+  OTHERS: "Otros",
 };

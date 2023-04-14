@@ -92,7 +92,7 @@ export const deleteCompany = async (req, res) => {
 
 export const updateCompany = async (req, res) => {
   const { id, code, image, associatedCompany } = req.body.dataCompany;
-  
+
   try {
     const company = await CompanyModel.findByPk(id);
 
@@ -183,6 +183,23 @@ export const rmUserOfCompany = async (req, res) => {
     await company.removeUser(user);
 
     res.status(200).json({ userDeleted: user.id });
+  } catch (error) {
+    res.status(500).json({ errorMessage: error.message });
+  }
+};
+
+export const disconnectCompanyAssociated = async (req, res) => {
+  const { idCompany } = req.body;
+
+  try {
+    const company = await CompanyModel.findByPk(idCompany);
+    if (!company) {
+      res.status(404).json({ message: "Non-existent company" });
+      return;
+    }
+    company.associatedCompany = null;
+    await company.save();
+    res.status(200).json({ message: "Disassociated company", idCompany });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }

@@ -43,7 +43,6 @@ export const registerUser = async (req, res) => {
     isGoogle,
     firstName,
     lastName,
-    image,
     position,
     status
   );
@@ -116,8 +115,14 @@ export const logOut = async (req, res) => {
         user_id: idUser,
       },
     });
-    userToken.update({ token: null });
-    res.status(200).json({ message: "Closed session" });
+
+    if (userToken) {
+      userToken.token = null;
+      userToken.save();
+      res.status(200).json({ message: "Closed session" });
+      return;
+    }
+    res.status(404).json({ message: "Token not found" });
   } catch (error) {
     res.status(500).json({ errorMessage: error.message });
   }

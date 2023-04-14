@@ -4,7 +4,6 @@ export const errorRegister = (
   isGoogle,
   firstName,
   lastName,
-  image,
   position,
   status
 ) => {
@@ -15,7 +14,6 @@ export const errorRegister = (
   if (isGoogle === undefined) errors.push("isGoogle is required");
   if (!firstName) errors.push("First Name is required");
   if (!lastName) errors.push("Last Name is required");
-  if (!image) errors.push("Image is required");
   if (!position) errors.push("Position is required");
   if (!status) errors.push("Status is required");
 

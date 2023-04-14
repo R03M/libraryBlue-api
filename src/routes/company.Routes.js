@@ -6,7 +6,8 @@ import {
   updateCompany,
   selectCompany,
   allCompanyUsers,
-  rmUserOfCompany
+  rmUserOfCompany,
+  disconnectCompanyAssociated
 } from "../controllers/company.js";
 
 const router = Router();
@@ -18,5 +19,6 @@ router.delete("/rmUserOfCompany", rmUserOfCompany);
 router.delete("/deleteCompany", deleteCompany);
 router.post("/selectCompany", selectCompany);
 router.post("/allCompanyUsers", allCompanyUsers);
+router.put("/disconnectCopAssoc", disconnectCompanyAssociated);
 
 export default router;

@@ -130,7 +130,9 @@ export const updateItem = async (req, res) => {
       itemEntry ? (item.itemEntry = itemEntry) : null;
       itemEntryData ? (item.itemEntryData = itemEntryData) : null;
       category ? (item.category = category) : null;
-      associatedCompany ? (item.associatedCompany = associatedCompany) : null;
+      associatedCompany === false || associatedCompany === true
+        ? (item.associatedCompany = associatedCompany)
+        : null;
     }
     if (exitOnly) {
       item.currentCount = item.currentCount - currentCount;

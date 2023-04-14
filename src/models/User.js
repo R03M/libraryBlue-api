@@ -24,7 +24,7 @@ export const User = (sequelize) =>
       },
       image: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       position: {
         type: DataTypes.STRING,
