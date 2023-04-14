@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { Sequelize } from "sequelize";
-const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST } = process.env;
+const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT } = process.env;
 
 export const dbConfig = new Sequelize({
   logging: false,
@@ -8,7 +8,7 @@ export const dbConfig = new Sequelize({
   username: DB_USER,
   password: DB_PASSWORD,
   host: DB_HOST,
-  port: 5432,
+  port: DB_PORT,
   dialect: "postgres",
   dialectOptions: {
     // ssl: {
