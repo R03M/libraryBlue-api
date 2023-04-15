@@ -127,7 +127,12 @@ export const updateItem = async (req, res) => {
       lastCount ? (item.lastCount = lastCount) : null;
       currentCount ? (item.currentCount = currentCount) : null;
       lastCountDate ? (item.lastCountDate = lastCountDate) : null;
-      itemEntry ? (item.itemEntry = itemEntry) : null;
+
+      itemEntry
+        ? ((item.itemEntry = itemEntry),
+          (item.currentCount = item.currentCount + itemEntry))
+        : null;
+
       itemEntryDate ? (item.itemEntryDate = itemEntryDate) : null;
       category ? (item.category = category) : null;
       associatedCompany === false || associatedCompany === true
