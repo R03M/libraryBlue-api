@@ -29,7 +29,7 @@ export const createItem = async (req, res) => {
     lastCountDate,
     currentCount,
     itemEntry,
-    itemEntryData,
+    itemEntryDate,
     category,
     associatedCompany,
   } = req.body.item;
@@ -71,7 +71,7 @@ export const createItem = async (req, res) => {
       lastCountDate,
       currentCount,
       itemEntry,
-      itemEntryData,
+      itemEntryDate,
       category,
       associatedCompany,
     });
@@ -98,7 +98,7 @@ export const updateItem = async (req, res) => {
     lastCountDate,
     currentCount,
     itemEntry,
-    itemEntryData,
+    itemEntryDate,
     category,
     associatedCompany,
     exitOnly,
@@ -128,7 +128,7 @@ export const updateItem = async (req, res) => {
       currentCount ? (item.currentCount = currentCount) : null;
       lastCountDate ? (item.lastCountDate = lastCountDate) : null;
       itemEntry ? (item.itemEntry = itemEntry) : null;
-      itemEntryData ? (item.itemEntryData = itemEntryData) : null;
+      itemEntryDate ? (item.itemEntryDate = itemEntryDate) : null;
       category ? (item.category = category) : null;
       associatedCompany === false || associatedCompany === true
         ? (item.associatedCompany = associatedCompany)
