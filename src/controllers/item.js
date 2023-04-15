@@ -130,7 +130,7 @@ export const updateItem = async (req, res) => {
 
       itemEntry
         ? ((item.itemEntry = itemEntry),
-          (item.currentCount = item.currentCount + itemEntry))
+          (item.currentCount = item.currentCount + parseInt(itemEntry)))
         : null;
 
       itemEntryDate ? (item.itemEntryDate = itemEntryDate) : null;
