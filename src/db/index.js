@@ -22,7 +22,7 @@ item.belongsTo(company, { as: "company", foreignKey: "companyId" });
 
 token.belongsTo(user, { foreignKey: 'user_id' });
 
-export const syncDB = () => dbConfig.sync({ force: true });
+export const syncDB = () => dbConfig.sync({ alter: true });
 
 export {
   user as UserModel,
