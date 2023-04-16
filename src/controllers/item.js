@@ -115,7 +115,7 @@ export const updateItem = async (req, res) => {
       return;
     }
     const item = await ItemModel.findByPk(id);
-
+    
     if (!exitOnly) {
       code ? (item.code = code) : null;
       title ? (item.title = title) : null;
@@ -124,12 +124,14 @@ export const updateItem = async (req, res) => {
       image ? (item.image = image) : null;
       edition ? (item.edition = edition) : null;
       letter ? (item.letter = letter) : null;
-      lastCount ? (item.lastCount = lastCount) : null;
-      currentCount ? (item.currentCount = currentCount) : null;
+      lastCount ? (
+        item.lastCount = parseInt(lastCount),
+        item.currentCount = parseInt(lastCount)
+      ) : null;
       lastCountDate ? (item.lastCountDate = lastCountDate) : null;
 
       itemEntry
-        ? ((item.itemEntry = itemEntry),
+        ? ((item.itemEntry = parseInt(itemEntry)),
           (item.currentCount = item.currentCount + parseInt(itemEntry)))
         : null;
 
@@ -140,7 +142,7 @@ export const updateItem = async (req, res) => {
         : null;
     }
     if (exitOnly) {
-      item.currentCount = item.currentCount - currentCount;
+      item.currentCount = item.currentCount - parseInt(currentCount);
     }
 
     await item.save();
