@@ -4,7 +4,6 @@
   <img height="350" src="./assets/icon.png" />
 </p>
 
-API para la App **libraryBlue**.
 
 ## Arrancar el proyecto de manera local
 
